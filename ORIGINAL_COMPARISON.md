@@ -1,12 +1,14 @@
-# 原始定性对比表
+# Original Qualitative Comparison
 
-[返回展示首页](README.md)
+**English** | [简体中文](ORIGINAL_COMPARISON.zh-CN.md)
 
-以下将用户提供的 LaTeX 表格拆成四张 GitHub Markdown 表，完整保留九个方法的字段和等级。`\ourmethod` 按项目上下文显示为 **ReTune**。本文件是原稿归档，**不是经过统一实验验证的结论表**；版本与机制修订见 [README](README.md)。
+[Back to the guide](README.md)
 
-`✓`、`✗`、`--` 分别对应原表的勾、叉和未标注。`--` 不应解读为不需要、不支持或不存在。
+The supplied LaTeX table is split into four GitHub Markdown tables below, preserving the fields and ratings for all nine methods. The project macro `\ourmethod` is displayed as **ReTune**. This file archives the original draft; **it is not a set of conclusions validated under a common experimental setup**. See the [README](README.md) for version notes and mechanism corrections.
 
-## 1. LLM 部署与克隆环境
+`✓`, `✗`, and `--` correspond to the checkmark, cross, and unspecified entries in the original table. `--` should not be interpreted as unnecessary, unsupported, or absent.
+
+## 1. LLM deployment and clone environments
 
 | Method | LLM Deployment | CE |
 | :--- | :--- | :---: |
@@ -20,7 +22,7 @@
 | STELLAR | API | ✓ |
 | **ReTune** | **Open-source** | **✗** |
 
-## 2. 参数选择
+## 2. Parameter selection
 
 | Method | Method used | Efficiency | Accuracy |
 | :--- | :--- | :---: | :---: |
@@ -34,7 +36,7 @@
 | STELLAR | LLM+RAG | High | High |
 | **ReTune** | **dual-LLM** | **High** | **High** |
 
-## 3. 配置探索
+## 3. Configuration exploration
 
 | Method | Method used | Efficiency | Precision |
 | :--- | :--- | :---: | :---: |
@@ -48,7 +50,7 @@
 | STELLAR | Agent | Medium | Medium |
 | **ReTune** | **Agent** | **Medium** | **High** |
 
-## 4. 配置推荐
+## 4. Configuration recommendation
 
 | Method | Method used | Efficiency | Safety |
 | :--- | :--- | :---: | :---: |
@@ -62,25 +64,25 @@
 | STELLAR | Rule+ST | Low | High |
 | **ReTune** | **Workload sim.** | **High** | **High** |
 
-## 术语
+## Glossary
 
-| 缩写 | 英文 | 中文 |
+| Abbreviation | Expansion | Meaning in this guide |
 | :--- | :--- | :--- |
-| ST | Stress Testing | 压力测试；展示时建议进一步说明是否为代表性负载回放。 |
-| CE | Clone Environment | 克隆环境；与独立测试集群、真实系统反馈区分。 |
-| BO | Bayesian Optimization | 贝叶斯优化。 |
-| GP | Gaussian Process | 高斯过程。 |
-| RL | Reinforcement Learning | 强化学习。 |
-| RAG | Retrieval-Augmented Generation | 检索增强生成。 |
-| LASSO | Least Absolute Shrinkage and Selection Operator | 使用 L1 正则化进行回归与变量选择。 |
-| CEM | Cross-Entropy Method | 交叉熵方法；README 中用于说明 ReTune 数值探索。 |
-| Workload sim. | Workload Similarity | 按本项目设计指工作负载相似度，建议在正式表格中写全。 |
+| ST | Stress Testing | Specify whether this includes representative workload replay when presenting a method. |
+| CE | Clone Environment | Distinguish a production clone from a separate test cluster and empirical system feedback. |
+| BO | Bayesian Optimization | Optimization using a probabilistic surrogate and an acquisition strategy. |
+| GP | Gaussian Process | A probabilistic model used, for example, as a performance surrogate. |
+| RL | Reinforcement Learning | Learning a policy from interactions and reward feedback. |
+| RAG | Retrieval-Augmented Generation | Generation informed by retrieved information. |
+| LASSO | Least Absolute Shrinkage and Selection Operator | Regression and variable selection using L1 regularization. |
+| CEM | Cross-Entropy Method | The numerical exploration method discussed for ReTune in the README. |
+| Workload sim. | Workload Similarity | Workload similarity in this project's design; spell it out in the final table. |
 
-## 正式展示前应修订的口径
+## Points to revise before formal presentation
 
-1. **E2ETune 阶段划分**：论文中的代价模型用于离线标签生成，在线配置由微调模型推荐；原表的 `Cost model` 可能混淆阶段。[论文](https://www.vldb.org/pvldb/vol18/p5540-huang.pdf)
-2. **部署分类**：开放权重与本地部署不是同义词。λ-Tune 当前仓库已有本地模型入口；若复现论文实验，仍应固定相应代码与调用方式。[作者仓库](https://github.com/gsvic/lambda-tune)
-3. **CE 分类**：应逐项补充原文证据，明确是论文实验设置还是方法必需条件。STELLAR 使用 CloudLab 测试集群，这一事实本身不能证明必须克隆生产环境。[论文 §5.1](https://arxiv.org/html/2602.23220v1)
-4. **效率与精度等级**：需说明统一负载、预算、指标和分级阈值；否则仅保留为作者定性判断。
-5. **安全等级**：将真实测量、约束检查、退化检测及恢复能力分开描述。压力测试或相似度匹配均不单独构成安全保证。
-6. **引用版本**：E2ETune 正式版为 PVLDB 2025；AgentTune 当前作者仓库标注 SIGMOD 2026；STELLAR 的 SC 2025 工作另有 2026 年 arXiv 版本。引用键中的年份可以与正式出版年份不同，需核对参考文献条目。[E2ETune](https://www.vldb.org/pvldb/vol18/p5540-huang.pdf) · [AgentTune](https://github.com/intlyy/AgentTune) · [STELLAR 作者实验室](https://sites.google.com/udel.edu/dirlab/home)
+1. **E2ETune's phases:** The paper uses the cost model for offline label generation, while a fine-tuned model recommends configurations online. The original `Cost model` entry may conflate these phases. [Paper](https://www.vldb.org/pvldb/vol18/p5540-huang.pdf)
+2. **Deployment categories:** Open weights and local deployment are not synonymous. The current λ-Tune repository includes a local-model interface. Pin the relevant code and invocation settings when reproducing the paper. [Author repository](https://github.com/gsvic/lambda-tune)
+3. **CE categories:** Add evidence from each paper and distinguish an experimental setting from an algorithmic requirement. STELLAR uses a CloudLab test cluster; this fact alone does not establish that it requires cloning production. [Paper, §5.1](https://arxiv.org/html/2602.23220v1)
+4. **Efficiency and accuracy ratings:** Specify common workloads, budgets, metrics, and rating thresholds. Otherwise, retain these labels only as qualitative judgments from the draft.
+5. **Safety ratings:** Describe empirical measurement, constraint checking, regression detection, and restoration separately. Neither stress testing nor similarity matching alone guarantees safety.
+6. **Citation versions:** E2ETune's published version is PVLDB 2025; AgentTune's current author repository labels the work SIGMOD 2026; the SC 2025 STELLAR work also has a 2026 arXiv version. Years in citation keys may differ from publication years, so verify the bibliography entries. [E2ETune](https://www.vldb.org/pvldb/vol18/p5540-huang.pdf) · [AgentTune](https://github.com/intlyy/AgentTune) · [STELLAR author laboratory](https://sites.google.com/udel.edu/dirlab/home)
