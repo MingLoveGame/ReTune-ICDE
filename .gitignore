@@ -1,0 +1,8 @@
+.DS_Store
+.ssh/
+.env
+.env.*
+*.pem
+id_ed25519*
+.venv/
+__pycache__/
