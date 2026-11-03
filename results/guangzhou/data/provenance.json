@@ -1,0 +1,40 @@
+{
+  "verified_on": "2026-11-03",
+  "deployment": {
+    "location": "Guangzhou supercomputing center",
+    "physical_storage_nodes": 128,
+    "physical_node_count_source": "Confirmed by project owner on 2026-11-03",
+    "ceph_version": "17.2.7",
+    "osds": 128,
+    "active_mds": 16,
+    "standby_mds": 2,
+    "max_fuse_clients": 16,
+    "pool_replicas": 1,
+    "software_configuration_source": "Archived CephFS performance report, 2026-10-23"
+  },
+  "scope": "Ten improvement cases from 22 comparable archived subcases. Historical baseline versus best observed tuning result per subcase; not a cross-method comparison or a component ablation.",
+  "source_dataset": "ReTune_Plot_Kit/data/plot_data.json",
+  "source_figures": "ReTune_Plot_Kit/output/retune_{bandwidth,latency}.{png,svg,pdf}",
+  "native_verification": {
+    "passed": 60,
+    "failed": 0,
+    "source_files_verified": 41,
+    "maximum_native_summary_difference": "5E-14",
+    "raw_logs_included": false
+  },
+  "formulas": {
+    "bandwidth_factor": "retune / baseline",
+    "latency_reduction_pct": "100 * (1 - retune / baseline)"
+  },
+  "sha256": {
+    "data/plot_data.json": "144a6a5df44a9b4e7c821e3cab2373d700c7516d1fc9ad1a6430152d4ba638fc",
+    "data/summary.csv": "0f453367fe8ce1c30897db1b3f5607260d301dd6b13e46f95808dcd7f31f635e",
+    "data/used_values.csv": "7412d3f2351d4260e369d31c1c82fa7466fcf2dab4e845cdeb6089bc17e2f46c",
+    "figures/retune_bandwidth.pdf": "625697a4298e73f267c676cd047722eace64e8769c72633dc89258424e8d42ed",
+    "figures/retune_bandwidth.png": "fd2b50a29cafa30d116d984070cc8fbba30076fa8b3ec60d01ac552c3f423147",
+    "figures/retune_bandwidth.svg": "480f8c1ca7858977874a83a4cbfedda965aa6b8e737131ddd2e9030463f2d4ae",
+    "figures/retune_latency.pdf": "16438a3a3f5bb536ca6849732b637d148e4b35b1bc2425db15e1baa9fe90c0a9",
+    "figures/retune_latency.png": "4914216187e7fb5e5d7118482bf02b676cba4cd671f43d62f5a8dde258aace28",
+    "figures/retune_latency.svg": "362c94abdcdaf56b21439704a9ca7cec74a6a9980c14bd08b4a31138c16d4573"
+  }
+}

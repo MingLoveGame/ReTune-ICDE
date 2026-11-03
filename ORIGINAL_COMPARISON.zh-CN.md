@@ -4,11 +4,51 @@
 
 [返回展示首页](README.zh-CN.md)
 
-以下将用户提供的 LaTeX 表格拆成四张 GitHub Markdown 表，完整保留九个方法的字段和等级。`\ourmethod` 按项目上下文显示为 **ReTune**。本文件是原稿归档，**不是经过统一实验验证的结论表**；版本与机制修订见 [README](README.zh-CN.md)。
+以下按原始调优对象将用户提供的 LaTeX 表格分为两类，每类展示四个比较维度，完整保留九个方法的字段和等级。`\ourmethod` 按项目上下文显示为 **ReTune**。本文件是原稿归档，**不是经过统一实验验证的结论表**；版本与机制修订见 [README](README.zh-CN.md)。
 
 `✓`、`✗`、`--` 分别对应原表的勾、叉和未标注。`--` 不应解读为不需要、不支持或不存在。
 
-## 1. LLM 部署与克隆环境
+## 1. 文件系统调参
+
+ReTune、STELLAR 面向文件系统；ADSTS 作为分布式存储相关工作列入，不表示其已验证 CephFS 端到端调优。
+
+### 1.1. LLM 部署与克隆环境
+
+| Method | LLM Deployment | CE |
+| :--- | :--- | :---: |
+| **ReTune** | **Open-source** | **✗** |
+| STELLAR | API | ✓ |
+| ADSTS | -- | ✓ |
+
+### 1.2. 参数选择
+
+| Method | Method used | Efficiency | Accuracy |
+| :--- | :--- | :---: | :---: |
+| **ReTune** | **dual-LLM** | **High** | **High** |
+| STELLAR | LLM+RAG | High | High |
+| ADSTS | LASSO+ST | Low | High |
+
+### 1.3. 配置探索
+
+| Method | Method used | Efficiency | Precision |
+| :--- | :--- | :---: | :---: |
+| **ReTune** | **Agent** | **Medium** | **High** |
+| STELLAR | Agent | Medium | Medium |
+| ADSTS | RL | Low | Low |
+
+### 1.4. 配置推荐
+
+| Method | Method used | Efficiency | Safety |
+| :--- | :--- | :---: | :---: |
+| **ReTune** | **Workload sim.** | **High** | **High** |
+| STELLAR | Rule+ST | Low | High |
+| ADSTS | ST | Low | High |
+
+## 2. 数据库调参
+
+这些工作的原始调优对象是数据库。表中等级不是文件系统实测结果，展示首页中的文件系统适配内容属于迁移建议。
+
+### 2.1. LLM 部署与克隆环境
 
 | Method | LLM Deployment | CE |
 | :--- | :--- | :---: |
@@ -18,11 +58,8 @@
 | Rabbit | API | ✓ |
 | λ-Tune | API | -- |
 | AgentTune | API | -- |
-| ADSTS | -- | ✓ |
-| STELLAR | API | ✓ |
-| **ReTune** | **Open-source** | **✗** |
 
-## 2. 参数选择
+### 2.2. 参数选择
 
 | Method | Method used | Efficiency | Accuracy |
 | :--- | :--- | :---: | :---: |
@@ -32,11 +69,8 @@
 | Rabbit | LLM+RAG | High | High |
 | λ-Tune | -- | -- | -- |
 | AgentTune | Agent | High | High |
-| ADSTS | LASSO+ST | Low | High |
-| STELLAR | LLM+RAG | High | High |
-| **ReTune** | **dual-LLM** | **High** | **High** |
 
-## 3. 配置探索
+### 2.3. 配置探索
 
 | Method | Method used | Efficiency | Precision |
 | :--- | :--- | :---: | :---: |
@@ -46,11 +80,8 @@
 | Rabbit | LLM | High | Medium |
 | λ-Tune | LLM | High | Medium |
 | AgentTune | LLM | High | Medium |
-| ADSTS | RL | Low | Low |
-| STELLAR | Agent | Medium | Medium |
-| **ReTune** | **Agent** | **Medium** | **High** |
 
-## 4. 配置推荐
+### 2.4. 配置推荐
 
 | Method | Method used | Efficiency | Safety |
 | :--- | :--- | :---: | :---: |
@@ -60,9 +91,6 @@
 | Rabbit | GP+ST | Low | High |
 | λ-Tune | Multi Eval+ST | Low | High |
 | AgentTune | Tree+ST | Low | High |
-| ADSTS | ST | Low | High |
-| STELLAR | Rule+ST | Low | High |
-| **ReTune** | **Workload sim.** | **High** | **High** |
 
 ## 术语
 

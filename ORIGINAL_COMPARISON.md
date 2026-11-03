@@ -4,11 +4,51 @@
 
 [Back to the guide](README.md)
 
-The supplied LaTeX table is split into four GitHub Markdown tables below, preserving the fields and ratings for all nine methods. The project macro `\ourmethod` is displayed as **ReTune**. This file archives the original draft; **it is not a set of conclusions validated under a common experimental setup**. See the [README](README.md) for version notes and mechanism corrections.
+The supplied LaTeX table is grouped by original tuning target, with four comparison dimensions in each group. All fields and ratings for the nine methods are preserved. The project macro `\ourmethod` is displayed as **ReTune**. This file archives the original draft; **it is not a set of conclusions validated under a common experimental setup**. See the [README](README.md) for version notes and mechanism corrections.
 
 `✓`, `✗`, and `--` correspond to the checkmark, cross, and unspecified entries in the original table. `--` should not be interpreted as unnecessary, unsupported, or absent.
 
-## 1. LLM deployment and clone environments
+## 1. File-system tuning
+
+ReTune and STELLAR address file systems. ADSTS is included as related distributed-storage work; this grouping does not claim verified end-to-end CephFS results.
+
+### 1.1. LLM deployment and clone environments
+
+| Method | LLM Deployment | CE |
+| :--- | :--- | :---: |
+| **ReTune** | **Open-source** | **✗** |
+| STELLAR | API | ✓ |
+| ADSTS | -- | ✓ |
+
+### 1.2. Parameter selection
+
+| Method | Method used | Efficiency | Accuracy |
+| :--- | :--- | :---: | :---: |
+| **ReTune** | **dual-LLM** | **High** | **High** |
+| STELLAR | LLM+RAG | High | High |
+| ADSTS | LASSO+ST | Low | High |
+
+### 1.3. Configuration exploration
+
+| Method | Method used | Efficiency | Precision |
+| :--- | :--- | :---: | :---: |
+| **ReTune** | **Agent** | **Medium** | **High** |
+| STELLAR | Agent | Medium | Medium |
+| ADSTS | RL | Low | Low |
+
+### 1.4. Configuration recommendation
+
+| Method | Method used | Efficiency | Safety |
+| :--- | :--- | :---: | :---: |
+| **ReTune** | **Workload sim.** | **High** | **High** |
+| STELLAR | Rule+ST | Low | High |
+| ADSTS | ST | Low | High |
+
+## 2. Database tuning
+
+These methods originally tune database systems. Their ratings are not file-system measurements, and the file-system adaptations in the guide are proposals.
+
+### 2.1. LLM deployment and clone environments
 
 | Method | LLM Deployment | CE |
 | :--- | :--- | :---: |
@@ -18,11 +58,8 @@ The supplied LaTeX table is split into four GitHub Markdown tables below, preser
 | Rabbit | API | ✓ |
 | λ-Tune | API | -- |
 | AgentTune | API | -- |
-| ADSTS | -- | ✓ |
-| STELLAR | API | ✓ |
-| **ReTune** | **Open-source** | **✗** |
 
-## 2. Parameter selection
+### 2.2. Parameter selection
 
 | Method | Method used | Efficiency | Accuracy |
 | :--- | :--- | :---: | :---: |
@@ -32,11 +69,8 @@ The supplied LaTeX table is split into four GitHub Markdown tables below, preser
 | Rabbit | LLM+RAG | High | High |
 | λ-Tune | -- | -- | -- |
 | AgentTune | Agent | High | High |
-| ADSTS | LASSO+ST | Low | High |
-| STELLAR | LLM+RAG | High | High |
-| **ReTune** | **dual-LLM** | **High** | **High** |
 
-## 3. Configuration exploration
+### 2.3. Configuration exploration
 
 | Method | Method used | Efficiency | Precision |
 | :--- | :--- | :---: | :---: |
@@ -46,11 +80,8 @@ The supplied LaTeX table is split into four GitHub Markdown tables below, preser
 | Rabbit | LLM | High | Medium |
 | λ-Tune | LLM | High | Medium |
 | AgentTune | LLM | High | Medium |
-| ADSTS | RL | Low | Low |
-| STELLAR | Agent | Medium | Medium |
-| **ReTune** | **Agent** | **Medium** | **High** |
 
-## 4. Configuration recommendation
+### 2.4. Configuration recommendation
 
 | Method | Method used | Efficiency | Safety |
 | :--- | :--- | :---: | :---: |
@@ -60,9 +91,6 @@ The supplied LaTeX table is split into four GitHub Markdown tables below, preser
 | Rabbit | GP+ST | Low | High |
 | λ-Tune | Multi Eval+ST | Low | High |
 | AgentTune | Tree+ST | Low | High |
-| ADSTS | ST | Low | High |
-| STELLAR | Rule+ST | Low | High |
-| **ReTune** | **Workload sim.** | **High** | **High** |
 
 ## Glossary
 

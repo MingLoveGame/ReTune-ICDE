@@ -2,7 +2,7 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
-From database knob tuning to production file systems: this guide covers **GPTuner, E2ETune, TopTune, Rabbit, λ-Tune, AgentTune, ADSTS, STELLAR, and ReTune**, explaining their core mechanisms and how to adapt parameter selection, configuration exploration, and configuration recommendation to file systems.
+This guide separates **file-system tuning** from **database tuning** by each work's original target. ReTune and STELLAR address file systems; ADSTS is included as related distributed-storage work. GPTuner, E2ETune, TopTune, Rabbit, λ-Tune, and AgentTune form a separate database group, with proposed file-system adaptations clearly identified.
 
 > **Scope:** Descriptions of existing methods are based on papers, author-maintained repositories, or the supplied comparison table. Sections labeled “Suggested file-system adaptation” propose engineering changes; they do not imply that the original papers implemented those changes. This guide does not report comparative file-system experiments on these methods.
 >
@@ -11,8 +11,9 @@ From database knob tuning to production file systems: this guide covers **GPTune
 ## Contents
 
 - [Method overview](#overview)
-- [Database tuning methods](#database-methods)
-- [Storage and file-system tuning methods](#storage-methods)
+- [File-system tuning](#storage-methods)
+- [ReTune: Guangzhou results](#guangzhou-results)
+- [Database tuning: migration references](#database-methods)
 - [Five modules for file-system adaptation](#adaptation)
 - [Evaluation and comparison guidelines](#evaluation)
 - [Original comparison tables and glossary](ORIGINAL_COMPARISON.md)
@@ -20,17 +21,30 @@ From database knob tuning to production file systems: this guide covers **GPTune
 <a id="overview"></a>
 ## Method overview
 
-| Method | Core mechanism | Main adaptation task | Resources |
-| :--- | :--- | :--- | :--- |
-| **GPTuner** | Extract tuning knowledge, select knobs and ranges, then perform coarse-to-fine BO | Replace the knowledge base and evaluation runner | [Paper](https://arxiv.org/abs/2311.03157) · [Code](https://github.com/SolidLao/GPTuner) |
-| **E2ETune** | Generate training data offline and fine-tune a model to produce configurations directly | Rebuild I/O features, training examples, and the performance surrogate | [Paper](https://www.vldb.org/pvldb/vol18/p5540-huang.pdf) · [Code](https://github.com/RUCKBReasoning/E2ETune) |
-| **TopTune** | Collaboratively optimize separate categorical and continuous subspaces | Rebuild the mixed search space, constraints, and evaluation cost accounting | [Paper](https://ieeexplore.ieee.org/abstract/document/11113200/) |
-| **Rabbit** | Supplied table: RAG-assisted selection, LLM exploration, and GP plus empirical evaluation | Build versioned parameter knowledge and tuning histories | [Paper entry](https://doi.org/10.1109/ICDE65448.2025.00284) |
-| **λ-Tune** | Generate complete candidate configurations and control evaluation costs | Replace SQL context with I/O context and configuration plans | [Paper](https://arxiv.org/abs/2411.03500) · [Code](https://github.com/gsvic/lambda-tune) |
-| **AgentTune** | Four agents for workload analysis, knob selection, range pruning, and recommendation | Replace domain inputs and system tools for each agent | [Code and paper entry](https://github.com/intlyy/AgentTune) |
-| **ADSTS** | Supplied table: LASSO selection, RL exploration, and empirical feedback | Define file-system states, actions, and rewards | [Paper entry](https://doi.org/10.1145/3545008.3545012) |
-| **STELLAR** | Parameter extraction, I/O analysis, agent-driven evaluation, and rule accumulation | Extend from Lustre to the target file system and its production constraints | [Paper](https://arxiv.org/abs/2602.23220) · [Code archive](https://zenodo.org/records/15284241) |
-| **ReTune** | Dual-LLM selection, Agent/CEM exploration, and matching against validated samples | Integrate the preparation, operation, and maintenance phases | This project: based on the supplied table and project design draft |
+Classification follows the system being tuned, not whether a method uses an LLM, BO, or RL. Database tuning results are not presented as file-system results.
+
+### File-system tuning
+
+ReTune is this project; STELLAR targets parallel file systems. ADSTS is grouped here as related distributed-storage work, without claiming verified end-to-end CephFS results.
+
+| Method | Original tuning target | Core mechanism | Main adaptation task | Resources |
+| :--- | :--- | :--- | :--- | :--- |
+| **ReTune** | File systems (this project) | Dual-LLM selection, Agent/CEM exploration, and matching against validated samples | Integrate the preparation, operation, and maintenance phases | [Project results in Guangzhou](#guangzhou-results); design from the supplied table and project draft |
+| **STELLAR** | Parallel file systems (Lustre) | Parameter extraction, I/O analysis, agent-driven evaluation, and rule accumulation | Extend from Lustre to the target file system and its production constraints | [Paper](https://arxiv.org/abs/2602.23220) · [Code archive](https://zenodo.org/records/15284241) |
+| **ADSTS** | Distributed storage (related work) | Supplied table: LASSO selection, RL exploration, and empirical feedback | Define file-system states, actions, and rewards | [Paper entry](https://doi.org/10.1145/3545008.3545012) |
+
+### Database tuning
+
+These six methods originally tune database systems. Their file-system adaptations below are engineering proposals rather than results reported by the original papers.
+
+| Method | Original tuning target | Core mechanism | Main adaptation task | Resources |
+| :--- | :--- | :--- | :--- | :--- |
+| **GPTuner** | Database systems | Extract tuning knowledge, select knobs and ranges, then perform coarse-to-fine BO | Replace the knowledge base and evaluation runner | [Paper](https://arxiv.org/abs/2311.03157) · [Code](https://github.com/SolidLao/GPTuner) |
+| **E2ETune** | Database systems | Generate training data offline and fine-tune a model to produce configurations directly | Rebuild I/O features, training examples, and the performance surrogate | [Paper](https://www.vldb.org/pvldb/vol18/p5540-huang.pdf) · [Code](https://github.com/RUCKBReasoning/E2ETune) |
+| **TopTune** | Database systems | Collaboratively optimize separate categorical and continuous subspaces | Rebuild the mixed search space, constraints, and evaluation cost accounting | [Paper](https://ieeexplore.ieee.org/abstract/document/11113200/) |
+| **Rabbit** | Database systems | Supplied table: RAG-assisted selection, LLM exploration, and GP plus empirical evaluation | Build versioned parameter knowledge and tuning histories | [Paper entry](https://doi.org/10.1109/ICDE65448.2025.00284) |
+| **λ-Tune** | Database systems | Generate complete candidate configurations and control evaluation costs | Replace SQL context with I/O context and configuration plans | [Paper](https://arxiv.org/abs/2411.03500) · [Code](https://github.com/gsvic/lambda-tune) |
+| **AgentTune** | Database systems | Four agents for workload analysis, knob selection, range pruning, and recommendation | Replace domain inputs and system tools for each agent | [Code and paper entry](https://github.com/intlyy/AgentTune) |
 
 The descriptions of Rabbit and ADSTS provisionally follow the supplied table because their full papers were unavailable for verification during this review. A missing code link means that an official author repository was not confirmed, not that no public implementation exists. STELLAR provides an author-published code archive.
 
@@ -41,8 +55,85 @@ The descriptions of Rabbit and ADSTS provisionally follow the supplied table bec
 - **Stress testing (ST):** It provides performance evidence for a candidate, but does not establish production safety by itself. Tail latency, failures, recovery, and durability semantics also need evaluation.
 - **High / Medium / Low:** These labels are preserved in the [original tables](ORIGINAL_COMPARISON.md) as qualitative judgments from the supplied draft. They are not rankings obtained under a common experimental setup.
 
+<a id="storage-methods"></a>
+## File-system tuning
+
+This group presents the project itself and work on file systems, followed by related distributed-storage research. ADSTS is not treated as evidence of a verified CephFS application-level tuning workflow.
+
+<a id="retune"></a>
+### ReTune: separating search and validation from online recommendation
+
+**Project design.** According to the supplied table and project design draft, ReTune uses two local LLMs for parameter selection and cross-verification. An agent invokes numerical search tools to build validated samples during preparation or maintenance; the operation phase recommends configurations based on workload similarity. Here, `Workload sim.` means **workload similarity**, not a simulator.
+
+**Suggested file-system adaptation:**
+
+| Phase | Required integration |
+| :--- | :--- |
+| Preparation | Build parameter knowledge for the target version, controlled configuration interfaces, and workload representations. Generate and validate the initial samples. |
+| Operation | Filter samples by version, hardware, and configuration applicability before matching workloads. Propose a change only when the coverage threshold is satisfied. |
+| Maintenance | Search and measure uncovered workloads within a budget. Add validated configurations to the sample bank and update invalidated records. |
+
+**Applicability limits.** Retain the current configuration and register workloads for later processing when sample coverage is insufficient. Calibrate similarity against regression risk in the target environment; similarity alone is not a safety guarantee. Avoiding a production clone still leaves preparation, maintenance, and validation costs.
+
+<a id="guangzhou-results"></a>
+#### Guangzhou results: 128 physical storage nodes
+
+The following **CephFS I/O tuning** figures show typical workloads on **128 physical storage nodes at the Guangzhou supercomputing center**. They compare the registered historical baseline with each workload's best observed ReTune tuning result. These measurements belong to the file-system category; they are not a comparison against the database methods below.
+
+| Workload | Bandwidth relative to baseline | Latency reduction |
+| :--- | :---: | :---: |
+| Graph vertex sequential write | **5.69×** | **82.77%** |
+| Graph edge sequential write | **5.34×** | **81.55%** |
+| IOR `wrfout` output | **3.15×** | **69.67%** (amortized) |
+
+![Bandwidth of typical workloads on 128 physical storage nodes at the Guangzhou supercomputing center](results/guangzhou/figures/retune_bandwidth.png)
+
+*Bandwidth of typical workloads on 128 physical storage nodes at the Guangzhou supercomputing center. Higher is better; labels show ReTune / baseline.*
+
+![Latency of typical workloads on 128 physical storage nodes at the Guangzhou supercomputing center](results/guangzhou/figures/retune_latency.png)
+
+*Latency of the same typical workloads. Lower is better; labels show the reduction relative to the baseline.*
+
+**Measurement scope.** The plots contain ten improvement cases from 22 comparable archived subcases, with potentially different configurations. DB Update / DB Lookup denote 4 KiB file-system I/O tests, not database transaction results; WRF Output is IOR output I/O. The pool uses a single replica. The fio result reflects a single stream capped at 2 GiB/s and changes in workflow and FUSE implementation. These historical observations do not isolate the effects of individual ReTune components.
+
+[Deployment, workload definitions, and interpretation](results/guangzhou/README.md) · [Exact plotting data](results/guangzhou/data/plot_data.json) · [Recomputed summary](results/guangzhou/data/summary.csv) · [Bandwidth PDF](results/guangzhou/figures/retune_bandwidth.pdf) · [Latency PDF](results/guangzhou/figures/retune_latency.pdf)
+
+<a id="stellar"></a>
+### STELLAR: an agent-driven tuning loop for parallel file systems
+
+**Original method.** STELLAR extracts parameters from documentation, analyzes application I/O, changes configurations, reruns applications, and accumulates experience as reusable rules. Its public paper evaluates Lustre on CloudLab and discusses limits related to production scale and privileges. It already targets file systems; adaptation mainly concerns migration across systems and production integration. [Paper, §4–5](https://arxiv.org/html/2602.23220v1) · [Author code archive](https://zenodo.org/records/15284241)
+
+**Suggested file-system adaptation:**
+
+| Stage | Components to replace or extend |
+| :--- | :--- |
+| Parameters and tools | Rebuild the documentation index, configuration commands, and metric mappings when moving to a system such as CephFS. Lustre knobs and rules cannot be transferred by name alone. |
+| Workload analysis | Retain I/O feature analysis and add the target system's metadata, cache, and background-recovery state. Measure monitoring overhead. |
+| Production execution | Schedule repeatable application reruns during maintenance windows, create reversible change plans, and bind rules to version and environment conditions. |
+
+**Where it fits.** HPC environments with representative applications, permission to rerun them, and configuration privileges. Using a test cluster does not by itself establish that the algorithm requires a production clone. Accumulating rules also does not justify unconditionally skipping validation for later configurations.
+
+<a id="adsts"></a>
+### ADSTS: learning configuration policies from feedback
+
+**Description in the supplied table.** ADSTS uses LASSO and empirical measurements to select parameters, reinforcement learning to explore configurations, and measured feedback for evaluation. The paper is *ADSTS: Automatic Distributed Storage Tuning System Using Deep Reinforcement Learning*, ICPP 2022. [Paper entry](https://doi.org/10.1145/3545008.3545012)
+
+> The full paper was unavailable during this review. This description retains the algorithm categories from the supplied table; specific training costs, performance figures, and CE requirements are not treated as verified conclusions.
+
+**Suggested file-system adaptation:**
+
+| Stage | Components to replace or extend |
+| :--- | :--- |
+| Parameter selection | Sample valid configurations within controlled windows and use repeated measurements to relate knobs to performance. Hold non-target variables fixed to reduce noise in LASSO-based selection. |
+| RL states and actions | Include workload, caches, queues, background tasks, and the current configuration in the state. Define actions as constrained parameter adjustments rather than arbitrary full-configuration writes. |
+| Rewards and operation | Explicitly constrain tail latency, errors, resource use, and change costs alongside throughput gains. Distinguish exploratory training from inference with a trained policy. |
+
+**Where it fits.** Environments with sufficient interaction budgets and recurring workload patterns. Since ADSTS targets distributed storage, adaptation centers on the target interfaces and observation semantics. For CephFS, check that observations and rewards cover MDSs, client caches, and the metadata path.
+
 <a id="database-methods"></a>
-## Database tuning methods
+## Database tuning: migration references
+
+The original tuning target of all six methods is a database system. Each subsection distinguishes the original mechanism from a suggested file-system adaptation; the latter still requires implementation and validation on the target file system.
 
 <a id="gptuner"></a>
 ### GPTuner: narrowing the search space with documented knowledge
@@ -136,56 +227,6 @@ The descriptions of Rabbit and ADSTS provisionally follow the supplied table bec
 | Configuration Recommender | Evaluate candidates through structured tools. Record effective configurations, performance feedback, and restoration status for search branches. |
 
 **Where it fits.** Complex workflows whose stages need independent replacement or evaluation. Multiple agents accessing one cluster also need configuration locking and state-version checks to prevent one trial from overwriting another trial's configuration.
-
-<a id="storage-methods"></a>
-## Storage and file-system tuning methods
-
-<a id="adsts"></a>
-### ADSTS: learning configuration policies from feedback
-
-**Description in the supplied table.** ADSTS uses LASSO and empirical measurements to select parameters, reinforcement learning to explore configurations, and measured feedback for evaluation. The paper is *ADSTS: Automatic Distributed Storage Tuning System Using Deep Reinforcement Learning*, ICPP 2022. [Paper entry](https://doi.org/10.1145/3545008.3545012)
-
-> The full paper was unavailable during this review. This description retains the algorithm categories from the supplied table; specific training costs, performance figures, and CE requirements are not treated as verified conclusions.
-
-**Suggested file-system adaptation:**
-
-| Stage | Components to replace or extend |
-| :--- | :--- |
-| Parameter selection | Sample valid configurations within controlled windows and use repeated measurements to relate knobs to performance. Hold non-target variables fixed to reduce noise in LASSO-based selection. |
-| RL states and actions | Include workload, caches, queues, background tasks, and the current configuration in the state. Define actions as constrained parameter adjustments rather than arbitrary full-configuration writes. |
-| Rewards and operation | Explicitly constrain tail latency, errors, resource use, and change costs alongside throughput gains. Distinguish exploratory training from inference with a trained policy. |
-
-**Where it fits.** Environments with sufficient interaction budgets and recurring workload patterns. Since ADSTS targets distributed storage, adaptation centers on the target interfaces and observation semantics. For CephFS, check that observations and rewards cover MDSs, client caches, and the metadata path.
-
-<a id="stellar"></a>
-### STELLAR: an agent-driven tuning loop for parallel file systems
-
-**Original method.** STELLAR extracts parameters from documentation, analyzes application I/O, changes configurations, reruns applications, and accumulates experience as reusable rules. Its public paper evaluates Lustre on CloudLab and discusses limits related to production scale and privileges. It already targets file systems; adaptation mainly concerns migration across systems and production integration. [Paper, §4–5](https://arxiv.org/html/2602.23220v1) · [Author code archive](https://zenodo.org/records/15284241)
-
-**Suggested file-system adaptation:**
-
-| Stage | Components to replace or extend |
-| :--- | :--- |
-| Parameters and tools | Rebuild the documentation index, configuration commands, and metric mappings when moving to a system such as CephFS. Lustre knobs and rules cannot be transferred by name alone. |
-| Workload analysis | Retain I/O feature analysis and add the target system's metadata, cache, and background-recovery state. Measure monitoring overhead. |
-| Production execution | Schedule repeatable application reruns during maintenance windows, create reversible change plans, and bind rules to version and environment conditions. |
-
-**Where it fits.** HPC environments with representative applications, permission to rerun them, and configuration privileges. Using a test cluster does not by itself establish that the algorithm requires a production clone. Accumulating rules also does not justify unconditionally skipping validation for later configurations.
-
-<a id="retune"></a>
-### ReTune: separating search and validation from online recommendation
-
-**Project design.** According to the supplied table and project design draft, ReTune uses two local LLMs for parameter selection and cross-verification. An agent invokes numerical search tools to build validated samples during preparation or maintenance; the operation phase recommends configurations based on workload similarity. Here, `Workload sim.` means **workload similarity**, not a simulator.
-
-**Suggested file-system adaptation:**
-
-| Phase | Required integration |
-| :--- | :--- |
-| Preparation | Build parameter knowledge for the target version, controlled configuration interfaces, and workload representations. Generate and validate the initial samples. |
-| Operation | Filter samples by version, hardware, and configuration applicability before matching workloads. Propose a change only when the coverage threshold is satisfied. |
-| Maintenance | Search and measure uncovered workloads within a budget. Add validated configurations to the sample bank and update invalidated records. |
-
-**Applicability limits.** Retain the current configuration and register workloads for later processing when sample coverage is insufficient. Calibrate similarity against regression risk in the target environment; similarity alone is not a safety guarantee. Avoiding a production clone still leaves preparation, maintenance, and validation costs.
 
 <a id="adaptation"></a>
 ## Five modules for file-system adaptation

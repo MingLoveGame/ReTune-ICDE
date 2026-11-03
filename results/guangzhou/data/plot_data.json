@@ -1,0 +1,160 @@
+{
+  "description": "Exact native metrics for the current 10-workload figures. Numeric strings preserve precision.",
+  "units": {
+    "bandwidth_MiB_s": "MiB/s",
+    "rate_ops_s": "ops/s",
+    "latency_ms": "ms"
+  },
+  "workloads": {
+    "rand_w": {
+      "name": "4 KiB random write",
+      "item_id": "std-rand-write",
+      "subproject": "rd1",
+      "baseline": {
+        "bandwidth_MiB_s": "362.0275",
+        "rate_ops_s": "92679.0017",
+        "latency_ms": "11.0370"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "440.8061",
+        "rate_ops_s": "112846.3183",
+        "latency_ms": "9.0683"
+      }
+    },
+    "rand_r": {
+      "name": "4 KiB random read",
+      "item_id": "std-rand-read",
+      "subproject": "rd1",
+      "baseline": {
+        "bandwidth_MiB_s": "1279.8855",
+        "rate_ops_s": "327650.4950",
+        "latency_ms": "3.1202"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "1490.3506",
+        "rate_ops_s": "381529.5817",
+        "latency_ms": "2.6806"
+      }
+    },
+    "edge_w": {
+      "name": "Graph edge sequential write",
+      "item_id": "graph",
+      "subproject": "rd1",
+      "baseline": {
+        "bandwidth_MiB_s": "417.8636",
+        "rate_ops_s": "1.6323",
+        "latency_ms": "9757.2986"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "2230.3095",
+        "rate_ops_s": "8.7121",
+        "latency_ms": "1799.8009"
+      }
+    },
+    "vertex_w": {
+      "name": "Graph vertex sequential write",
+      "item_id": "graph",
+      "subproject": "rd2",
+      "baseline": {
+        "bandwidth_MiB_s": "421.2712",
+        "rate_ops_s": "1.6456",
+        "latency_ms": "9709.9699"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "2395.1547",
+        "rate_ops_s": "9.3561",
+        "latency_ms": "1672.5490"
+      }
+    },
+    "fio": {
+      "name": "fio rate-limited read",
+      "item_id": "fio-streams",
+      "subproject": "read-1",
+      "baseline": {
+        "bandwidth_MiB_s": "213.7171497344970703125",
+        "rate_ops_s": "26.714644",
+        "latency_ms": "374.201415616195"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "2047.97269344329833984375",
+        "rate_ops_s": "255.996587",
+        "latency_ms": "6.107916763815"
+      }
+    },
+    "hpc": {
+      "name": "HPC wrfout",
+      "item_id": "hpc-mini",
+      "subproject": "wrfout",
+      "baseline": {
+        "bandwidth_MiB_s": "429.10",
+        "rate_ops_s": "429.10",
+        "latency_ms": "143.7467447916666666666666666666666666667"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "1349.73",
+        "rate_ops_s": "1349.73",
+        "latency_ms": "43.59700520833333333333333333333333333333"
+      }
+    },
+    "mixed": {
+      "name": "128 KiB mixed I/O (90% read)",
+      "item_id": "mixed400k",
+      "subproject": "rd1",
+      "baseline": {
+        "bandwidth_MiB_s": "13297.6795",
+        "rate_ops_s": "106381.3644",
+        "latency_ms": "3.0492"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "15560.7906",
+        "rate_ops_s": "124486.2546",
+        "latency_ms": "2.8790"
+      }
+    },
+    "seq_w": {
+      "name": "4 MiB sequential write",
+      "item_id": "std-seq-write",
+      "subproject": "rd1",
+      "baseline": {
+        "bandwidth_MiB_s": "9372.5667",
+        "rate_ops_s": "2343.1400",
+        "latency_ms": "436.2654"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "23520.4800",
+        "rate_ops_s": "5880.1233",
+        "latency_ms": "173.6057"
+      }
+    },
+    "seq_r": {
+      "name": "4 MiB sequential read",
+      "item_id": "std-seq-read",
+      "subproject": "rd1",
+      "baseline": {
+        "bandwidth_MiB_s": "24133.9400",
+        "rate_ops_s": "6033.4817",
+        "latency_ms": "169.3127"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "48111.2667",
+        "rate_ops_s": "12027.8117",
+        "latency_ms": "84.8553"
+      }
+    },
+    "vertex_r": {
+      "name": "Graph vertex random read",
+      "item_id": "graph",
+      "subproject": "rd4",
+      "baseline": {
+        "bandwidth_MiB_s": "47861.1552",
+        "rate_ops_s": "191444.6206",
+        "latency_ms": "10.6960"
+      },
+      "retune": {
+        "bandwidth_MiB_s": "88375.8436",
+        "rate_ops_s": "353503.3744",
+        "latency_ms": "5.7921"
+      }
+    }
+  }
+}
